@@ -126,23 +126,6 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document6]
-DocumentPath=OLD_Clock_And_Delay.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=3
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=JCXUBBGZ
-
-[Document7]
 DocumentPath=Sampling_Scope.BomDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -159,41 +142,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document8]
-DocumentPath=OLD_Trigger_And_Clock_Muxing.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=4
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=CMKTMIBP
-
-[Document9]
-DocumentPath=OLD_Trigger_And_Clock_Muxing.Harness
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document10]
+[Document7]
 DocumentPath=MCU.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -210,7 +159,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=CQUCHQDL
 
-[Document11]
+[Document8]
 DocumentPath=POWER.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -227,7 +176,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TZEWTYXH
 
-[Document12]
+[Document9]
 DocumentPath=3V3_LDO.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -244,7 +193,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HKEDSQDT
 
-[Document13]
+[Document10]
 DocumentPath=3V8_SWITCHER.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -261,7 +210,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TTCUUIQI
 
-[Document14]
+[Document11]
 DocumentPath=SIMO_SWITCHER.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -278,7 +227,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YYFHRNGC
 
-[Document15]
+[Document12]
 DocumentPath=Step_Gen.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -295,8 +244,8 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DQANQREW
 
-[Document16]
-DocumentPath=Delay_Line.SchDoc
+[Document13]
+DocumentPath=Programmable_Delay_Line.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -312,8 +261,8 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YUMAQPMH
 
-[Document17]
-DocumentPath=Delay_Line.Harness
+[Document14]
+DocumentPath=Programmable_Delay_Line.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -329,7 +278,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document18]
+[Document15]
 DocumentPath=VREF.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -346,8 +295,8 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RHIGYBIK
 
-[Document19]
-DocumentPath=ECL_Fanout.SchDoc
+[Document16]
+DocumentPath=ECL_Fanout_X3.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -363,8 +312,8 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RAAJNAYF
 
-[Document20]
-DocumentPath=ECL_Fanout.Harness
+[Document17]
+DocumentPath=ECL_Fanout_X3.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -380,24 +329,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document21]
-DocumentPath=OLD_Clock_And_Delay.Harness
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document22]
+[Document18]
 DocumentPath=Main.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -414,7 +346,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document23]
+[Document19]
 DocumentPath=Step_Gen.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -431,7 +363,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document24]
+[Document20]
 DocumentPath=CMOS_MUX.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -448,7 +380,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=ZDRTQHHQ
 
-[Document25]
+[Document21]
 DocumentPath=Counter.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -465,7 +397,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=JSWMZESW
 
-[Document26]
+[Document22]
 DocumentPath=Counter.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -482,7 +414,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document27]
+[Document23]
 DocumentPath=CMOS_MUX.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -499,7 +431,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document28]
+[Document24]
 DocumentPath=MCU.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -516,8 +448,42 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document29]
+[Document25]
 DocumentPath=Thermal_MGMT.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=16
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=LPBSOZUE
+
+[Document26]
+DocumentPath=ECL_Fanout_X2.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=17
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=LYVWKIHN
+
+[Document27]
+DocumentPath=ECL_Fanout_X2.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -531,7 +497,24 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=LPBSOZUE
+DocumentUniqueId=
+
+[Document28]
+DocumentPath=Thermal_MGMT.Harness
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
 
 [Configuration1]
 Name=Sources
@@ -1490,9 +1473,9 @@ UpdateVariants=1
 UpdateToLatestRevision=1
 PartTypes=0
 ComponentLibIdentifierKind0=Library Name And Type
-ComponentLibraryIdentifier0=7Sigma.DbLib/IC_Switching Regulators
-ComponentDesignItemID0=TPS65133DPDR
-ComponentSymbolReference0=TPS65133DPDR
+ComponentLibraryIdentifier0=7Sigma.DbLib/IC_Linear Regulators
+ComponentDesignItemID0=NCV8705MT33TCG
+ComponentSymbolReference0=NCV8705MT33TCG
 ComponentUpdate0=1
 ComponentIsDeviceSheet0=0
 FullReplace=1
@@ -1508,60 +1491,66 @@ RemoveParameters=0
 AddModels=1
 RemoveModels=1
 UpdateCurrentModels=1
-ParameterName0=Case/Package
+ParameterName0=Accuracy
 ParameterUpdate0=1
-ParameterName1=Comment
+ParameterName1=Box
 ParameterUpdate1=1
-ParameterName2=Component Kind
+ParameterName2=Case/Package
 ParameterUpdate2=1
-ParameterName3=Description
+ParameterName3=Comment
 ParameterUpdate3=1
-ParameterName4=HelpURL
+ParameterName4=Component Kind
 ParameterUpdate4=1
-ParameterName5=Library Reference
+ParameterName5=Description
 ParameterUpdate5=1
-ParameterName6=Manufacturer
+ParameterName6=Dropout Voltage
 ParameterUpdate6=1
-ParameterName7=Manufacturer Part Number
+ParameterName7=HelpURL
 ParameterUpdate7=1
-ParameterName8=Marking
+ParameterName8=Library Reference
 ParameterUpdate8=1
-ParameterName9=Max Input Voltage
+ParameterName9=Manufacturer
 ParameterUpdate9=1
-ParameterName10=Max Operating Temperature
+ParameterName10=Manufacturer Part Number
 ParameterUpdate10=1
-ParameterName11=Max Output Current
+ParameterName11=Max Input Voltage
 ParameterUpdate11=1
-ParameterName12=Max Output Voltage
+ParameterName12=Max Operating Temperature
 ParameterUpdate12=1
-ParameterName13=Min Input Voltage
+ParameterName13=Max Output Current
 ParameterUpdate13=1
-ParameterName14=Min Output Voltage
+ParameterName14=Max Output Voltage
 ParameterUpdate14=1
-ParameterName15=Number of Outputs
+ParameterName15=Min Input Voltage
 ParameterUpdate15=1
-ParameterName16=Number of Pins
+ParameterName16=Min Output Voltage
 ParameterUpdate16=1
-ParameterName17=Output Configuration
+ParameterName17=Mount
 ParameterUpdate17=1
-ParameterName18=Part Number
+ParameterName18=Nominal Output Voltage
 ParameterUpdate18=1
-ParameterName19=Quiescent Current
+ParameterName19=Number of Pins
 ParameterUpdate19=1
-ParameterName20=RoHS
+ParameterName20=Output Type
 ParameterUpdate20=1
-ParameterName21=Status
+ParameterName21=Part Number
 ParameterUpdate21=1
-ParameterName22=Supplier 1
+ParameterName22=Polarity
 ParameterUpdate22=1
-ParameterName23=Supplier Part Number 1
+ParameterName23=Quiescent Current
 ParameterUpdate23=1
-ParameterName24=Synchronous Rectifier
+ParameterName24=Reference Voltage
 ParameterUpdate24=1
+ParameterName25=RoHS
+ParameterUpdate25=1
+ParameterName26=Status
+ParameterUpdate26=1
+ParameterName27=Stock
+ParameterUpdate27=1
 ModelTypeGroup0=PCBLIB
 ModelTypeUpdate0=1
 ModelType0=PCBLIB
-ModelName0=SON45P300X80_HS-13N
+ModelName0=WDFN6
 ModelUpdate0=1
 
 [DatabaseUpdateOptions]
@@ -1571,26 +1560,81 @@ UpdateToLatestRevision=1
 PartTypes=0
 
 [NetInfos]
-Net1=NetName=INT_CLK|NetColor=$000099FF
-Net2=NetName=INT_CLK_1|NetColor=$000099FF
-Net3=NetName=N00000|NetColor=clBlack
-Net4=NetName=NetCLK_OUT_1|NetColor=$00A74E67
-Net5=NetName=NetR116_2|NetColor=$00A74E67
-Net6=NetName=NetR117_2|NetColor=$00A74E67
-Net7=NetName=NetR70_1|NetColor=clBlack
-Net8=NetName=NetR71_1|NetColor=clBlack
-Net9=NetName=NetU10_6|NetColor=clBlack
-Net10=NetName=NetU10_7|NetColor=clBlack
-Net11=NetName=NetU26_1|NetColor=$00A74E67
-Net12=NetName=NetU27_7|NetColor=$00A74E67
-Net13=NetName=NetU31_9|NetColor=$00A74E67
-Net14=NetName=NetU32_8|NetColor=$00A74E67
-Net15=NetName=NetU32_9|NetColor=$00A74E67
-Net16=NetName=NetU33_4|NetColor=$00A74E67
-Net17=NetName=OSC_FB|NetColor=$000099FF
-Net18=NetName=OSC_FB_1|NetColor=$000099FF
-Net19=NetName=TRIGGER|NetColor=$000099FF
-Net20=NetName=TRIGGER_1|NetColor=$000099FF
+Net1=NetName=CLK_OUT|NetColor=$000099FF
+Net2=NetName=CLK_OUT_1|NetColor=$000099FF
+Net3=NetName=COMP_IN_1_N|NetColor=$000099FF
+Net4=NetName=COMP_IN_1_P|NetColor=$000099FF
+Net5=NetName=COMP_IN_N|NetColor=$000099FF
+Net6=NetName=COMP_IN_P|NetColor=$000099FF
+Net7=NetName=COMP_REG_CLK_1|NetColor=$00E2745F
+Net8=NetName=COMP_REG_CLK_1_1|NetColor=$00E2745F
+Net9=NetName=COMP_REG_CLK_1_N|NetColor=$00E2745F
+Net10=NetName=COMP_REG_CLK_1_P|NetColor=$00E2745F
+Net11=NetName=COMP_REG_CLK_2|NetColor=$00E2745F
+Net12=NetName=COMP_REG_CLK_2_1|NetColor=$00E2745F
+Net13=NetName=COMP_REG_CLK_N|NetColor=$00E2745F
+Net14=NetName=COMP_REG_CLK_P|NetColor=$00E2745F
+Net15=NetName=COUNTER|NetColor=$00E2745F
+Net16=NetName=COUNTER_1|NetColor=$00E2745F
+Net17=NetName=DELAY_CLK|NetColor=$00E2745F
+Net18=NetName=DELAY_CLK_1|NetColor=$00E2745F
+Net19=NetName=DUT_1_N|NetColor=$000099FF
+Net20=NetName=DUT_1_P|NetColor=$000099FF
+Net21=NetName=DUT_N|NetColor=$000099FF
+Net22=NetName=DUT_P|NetColor=$000099FF
+Net23=NetName=INT_CLK|NetColor=$000099FF
+Net24=NetName=INT_CLK_1|NetColor=$000099FF
+Net25=NetName=N00000|NetColor=clBlack
+Net26=NetName=NetCLK_OUT_1|NetColor=$00A74E67
+Net27=NetName=NetCOMP_IN_N_1|NetColor=$000099FF
+Net28=NetName=NetCOMP_IN_P_1|NetColor=$000099FF
+Net29=NetName=NetR112_2|NetColor=$00E2745F
+Net30=NetName=NetR113_2|NetColor=clBlack
+Net31=NetName=NetR115_2|NetColor=$00E2745F
+Net32=NetName=NetR116_2|NetColor=$00E2745F
+Net33=NetName=NetR117_2|NetColor=$000099FF
+Net34=NetName=NetR121_1|NetColor=$00E2745F
+Net35=NetName=NetR122_1|NetColor=$00E2745F
+Net36=NetName=NetR70_1|NetColor=clBlack
+Net37=NetName=NetR71_1|NetColor=clBlack
+Net38=NetName=NetR90_2|NetColor=$00E2745F
+Net39=NetName=NetU1_2|NetColor=$000099FF
+Net40=NetName=NetU1_COMP_1_2|NetColor=$000099FF
+Net41=NetName=NetU1_COMP_2_2|NetColor=$000099FF
+Net42=NetName=NetU10_6|NetColor=clBlack
+Net43=NetName=NetU10_7|NetColor=clBlack
+Net44=NetName=NetU22_10|NetColor=$000099FF
+Net45=NetName=NetU22_11|NetColor=$000099FF
+Net46=NetName=NetU24_20|NetColor=$00E2745F
+Net47=NetName=NetU24_21|NetColor=$00E2745F
+Net48=NetName=NetU24_PROGRAMMABLE_DELAY_LINE_20|NetColor=$00E2745F
+Net49=NetName=NetU24_PROGRAMMABLE_DELAY_LINE_21|NetColor=$00E2745F
+Net50=NetName=NetU26_1|NetColor=$00A74E67
+Net51=NetName=NetU27_7|NetColor=$00A74E67
+Net52=NetName=NetU28_2|NetColor=$00E2745F
+Net53=NetName=NetU3_2|NetColor=$00E2745F
+Net54=NetName=NetU3_COMP_1_2|NetColor=$00E2745F
+Net55=NetName=NetU3_COMP_2_2|NetColor=$00E2745F
+Net56=NetName=NetU31_9|NetColor=$00E2745F
+Net57=NetName=NetU32_8|NetColor=$000099FF
+Net58=NetName=NetU32_9|NetColor=$00A74E67
+Net59=NetName=NetU33_4|NetColor=$00A74E67
+Net60=NetName=NetU4_4|NetColor=clBlack
+Net61=NetName=NetU4_COMP_1_4|NetColor=clBlack
+Net62=NetName=OSC_FB|NetColor=$00E2745F
+Net63=NetName=OSC_FB_1|NetColor=$00E2745F
+Net64=NetName=SNS_1_N|NetColor=$000099FF
+Net65=NetName=SNS_1_P|NetColor=$000099FF
+Net66=NetName=SNS_N|NetColor=$000099FF
+Net67=NetName=SNS_P|NetColor=$000099FF
+Net68=NetName=STEP_GEN_FEED_1_N|NetColor=$000099FF
+Net69=NetName=STEP_GEN_FEED_1_P|NetColor=$000099FF
+Net70=NetName=STEP_GEN_FEED_N|NetColor=$000099FF
+Net71=NetName=STEP_GEN_FEED_P|NetColor=$000099FF
+Net72=NetName=TRIGGER|NetColor=$000099FF
+Net73=NetName=TRIGGER_1|NetColor=$000099FF
+Net74=NetName=TRIGGER_IN|NetColor=$000099FF
+Net75=NetName=TRIGGER_IN_1|NetColor=$000099FF
 
 [Comparison Options]
 ComparisonOptions0=Kind=Net|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0
