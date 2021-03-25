@@ -1,0 +1,15 @@
+Project Outputs Generation Report
+---------------------------------
+Start Output Generation At 10:10:04 PM On 3/24/2021
+
+Output: Generates pick and place files
+Type  : Pick Place
+From  : Variant [JLCPCB] of PCB Document [Sampling_Scope.PcbDoc]
+   Generated File[Pick Place for Sampling_Scope(JLCPCB).txt]
+   Generated File[Pick Place for Sampling_Scope(JLCPCB).csv]
+
+
+Files Generated   : 2
+Documents Printed : 0
+
+Finished Output Generation At 10:10:06 PM On 3/24/2021
