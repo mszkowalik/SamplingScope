@@ -1,14 +1,10 @@
-Project Outputs Generation Report
----------------------------------
-Start Output Generation At 10:20:18 PM On 3/24/2021
-
-Output: JLCPCB_BOM
+Output: JLCPCB_CPL
 Type  : BOM
 From  : Variant [JLCPCB] of Project [Sampling_Scope.PrjPcb]
-   Generated File[JLCPCB_BOM-Sampling_Scope(JLCPCB).xlsx]
+   Generated File[JLCPCB_CPL-Sampling_Scope(JLCPCB).xlsx]
 
 
 Files Generated   : 1
 Documents Printed : 0
 
-Finished Output Generation At 10:20:52 PM On 3/24/2021
+Finished Output Generation At 6:07:14 PM On 3/31/2021

@@ -1,15 +1,36 @@
-Project Outputs Generation Report
----------------------------------
-Start Output Generation At 10:10:04 PM On 3/24/2021
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [JLCPCB] of PCB Document [Sampling_Scope_Panel.PcbDoc]
+   Generated File[Gerber Files.GTO]
+   Generated File[Gerber Files.GTP]
+   Generated File[Gerber Files.GTS]
+   Generated File[Gerber Files.GTL]
+   Generated File[Gerber Files.GP1]
+   Generated File[Gerber Files.GP2]
+   Generated File[Gerber Files.GBL]
+   Generated File[Gerber Files.GBS]
+   Generated File[Gerber Files.GBP]
+   Generated File[Gerber Files.GBO]
+   Generated File[Gerber Files.GM1]
+   Generated File[Gerber Files.GM2]
+   Generated File[Gerber Files.GM3]
+   Generated File[Gerber Files.GM4]
+   Generated File[Gerber Files.GM5]
+   Generated File[Gerber Files.GM6]
+   Generated File[Gerber Files.GM7]
+   Generated File[Gerber Files.GM9]
+   Generated File[Gerber Files.GKO]
+   Generated File[Gerber Files.3]
+   Generated File[Gerber Files.2]
+   Generated File[Gerber Files.1]
+   Generated File[Gerber Files.GML]
+   Generated File[Gerber Files.GD1]
+   Generated File[Gerber Files.RUL]
+   Generated File[Gerber Files.EXTREP]
+   Generated File[Gerber Files.REP]
 
-Output: Generates pick and place files
-Type  : Pick Place
-From  : Variant [JLCPCB] of PCB Document [Sampling_Scope.PcbDoc]
-   Generated File[Pick Place for Sampling_Scope(JLCPCB).txt]
-   Generated File[Pick Place for Sampling_Scope(JLCPCB).csv]
 
-
-Files Generated   : 2
+Files Generated   : 27
 Documents Printed : 0
 
-Finished Output Generation At 10:10:06 PM On 3/24/2021
+Finished Output Generation At 4:42:54 PM On 3/31/2021

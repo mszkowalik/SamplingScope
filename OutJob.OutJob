@@ -371,7 +371,7 @@ Configuration12_Item1=Record=ExportSTEPView|ExportComponentOptions=0|ExportModel
 OutputType13=BOM_PartType
 OutputName13=JLCPCB_BOM
 OutputCategory13=Report
-OutputDocumentPath13=[ActiveBOM Document]
+OutputDocumentPath13=
 OutputVariantName13=
 OutputEnabled13=1
 OutputEnabled13_OutputMedium1=0
@@ -385,24 +385,56 @@ PageOptions13=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|Print
 Configuration13_Name1=ColumnNameFormat
 Configuration13_Item1=CaptionAsName
 Configuration13_Name2=General
-Configuration13_Item2=OpenExported=False|AddToProject=False|ReportBOMViolationsInMessages=False|ForceFit=False|NotFitted=False|Database=False|DatabasePriority=False|IncludePcbData=False|IncludeVaultData=True|IncludeCloudData=False|IncludeDocumentData=True|IncludeAlternatives=False|ShowExportOptions=True|TemplateFilename=C:\Repos\7Sigma\Templates\JLCPCB_BOM.xltx|TemplateVaultGuid=|TemplateItemGuid=|TemplateRevisionGuid=|BatchMode=5|FormWidth=1200|FormHeight=710|SupplierProdQty=1|SupplierAutoQty=False|SupplierUseCachedPricing=False|SupplierCurrency=PLN|SolutionsPerItem=1|SuppliersPerSolution=1|ViewType=1|UseDirectApi=False|BomSetName=
+Configuration13_Item2=OpenExported=False|AddToProject=False|ReportBOMViolationsInMessages=False|ForceFit=False|NotFitted=False|Database=True|DatabasePriority=False|IncludePcbData=False|IncludeVaultData=False|IncludeCloudData=False|IncludeDocumentData=True|IncludeAlternatives=False|ShowExportOptions=True|TemplateFilename=C:\Repos\7Sigma\Templates\JLCPCB_BOM.xltx|TemplateVaultGuid=|TemplateItemGuid=|TemplateRevisionGuid=|BatchMode=5|FormWidth=1200|FormHeight=710|SupplierProdQty=1|SupplierAutoQty=False|SupplierUseCachedPricing=False|SupplierCurrency=PLN|SolutionsPerItem=1|SuppliersPerSolution=1|ViewType=1|UseDirectApi=False|BomSetName=
 Configuration13_Name3=GroupOrder
 Configuration13_Item3=
 Configuration13_Name4=SortOrder
 Configuration13_Item4=Designator=Down
 Configuration13_Name5=VisibleOrder
-Configuration13_Item5=Line #=100|Comment=161|Description=99|Designator=97|Manufacturer 1=119|Manufacturer Part Number 1=186|Manufacturer Lifecycle 1=164|Supplier 1=92|Supplier Part Number 1=159|Supplier Unit Price 1=144|Supplier Subtotal 1=139
+Configuration13_Item5=Description=99|Designator=97|Manufacturer 2=100|Manufacturer Part Number 2=100|Part Number=100|Supplier 2=100|Supplier Part Number 2=100
 Configuration13_Name6=VisibleOrder_Base
 Configuration13_Item6=Comment=161|Description=99|Designator=97|Quantity=84|Manufacturer Part Number 2=169|Manufacturer 2=102|Manufacturer 1=119|Manufacturer Part Number 1=186|Manufacturer Lifecycle 1=164|Supplier 1=92|Supplier Part Number 1=159|Supplier Unit Price 1=144|Supplier Subtotal 1=139
 Configuration13_Name7=VisibleOrder_Consolidated
 Configuration13_Item7=Line #=100|Comment=100|Description=100|Designator=100|Quantity=100|Manufacturer 1=119|Manufacturer Part Number 1=186|Manufacturer Lifecycle 1=164|Supplier 1=92|Supplier Part Number 1=159|Supplier Unit Price 1=144|Supplier Subtotal 1=139
 Configuration13_Name8=VisibleOrder_Flat
-Configuration13_Item8=Line #=100|Comment=161|Description=99|Designator=97|Manufacturer 1=119|Manufacturer Part Number 1=186|Manufacturer Lifecycle 1=164|Supplier 1=92|Supplier Part Number 1=159|Supplier Unit Price 1=144|Supplier Subtotal 1=139
+Configuration13_Item8=Description=99|Designator=97|Manufacturer 2=100|Manufacturer Part Number 2=100|Part Number=100|Supplier 2=100|Supplier Part Number 2=100
+OutputType14=BOM_PartType
+OutputName14=JLCPCB_CPL
+OutputCategory14=Report
+OutputDocumentPath14=
+OutputVariantName14=
+OutputEnabled14=1
+OutputEnabled14_OutputMedium1=0
+OutputEnabled14_OutputMedium2=0
+OutputEnabled14_OutputMedium3=2
+OutputEnabled14_OutputMedium4=0
+OutputEnabled14_OutputMedium5=0
+OutputEnabled14_OutputMedium6=0
+OutputDefault14=0
+PageOptions14=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
+Configuration14_Name1=ColumnNameFormat
+Configuration14_Item1=CaptionAsName
+Configuration14_Name2=General
+Configuration14_Item2=OpenExported=True|AddToProject=False|ReportBOMViolationsInMessages=False|ForceFit=False|NotFitted=False|Database=True|DatabasePriority=False|IncludePcbData=True|IncludeVaultData=False|IncludeCloudData=False|IncludeDocumentData=True|IncludeAlternatives=False|ShowExportOptions=True|TemplateFilename=C:\Repos\7Sigma\Templates\JLCPCB_CPL.xltx|TemplateVaultGuid=|TemplateItemGuid=|TemplateRevisionGuid=|BatchMode=5|FormWidth=1200|FormHeight=710|SupplierProdQty=1|SupplierAutoQty=False|SupplierUseCachedPricing=False|SupplierCurrency=PLN|SolutionsPerItem=1|SuppliersPerSolution=1|ViewType=1|UseDirectApi=False|BomSetName=
+Configuration14_Name3=GroupOrder
+Configuration14_Item3=
+Configuration14_Name4=PcbDocumentFileName
+Configuration14_Item4=Sampling_Scope.PcbDoc
+Configuration14_Name5=SortOrder
+Configuration14_Item5=Designator=Down
+Configuration14_Name6=VisibleOrder
+Configuration14_Item6=Description=99|Designator=97|Part Number=100|Supplier 2=100|Supplier Part Number 2=100|Center-X(mm)=100|Center-Y(mm)=100|Layer=100|Rotation=100
+Configuration14_Name7=VisibleOrder_Base
+Configuration14_Item7=Comment=161|Description=99|Designator=97|Quantity=84|Manufacturer Part Number 2=169|Manufacturer 2=102|Manufacturer 1=119|Manufacturer Part Number 1=186|Manufacturer Lifecycle 1=164|Supplier 1=92|Supplier Part Number 1=159|Supplier Unit Price 1=144|Supplier Subtotal 1=139
+Configuration14_Name8=VisibleOrder_Consolidated
+Configuration14_Item8=Line #=100|Comment=100|Description=100|Designator=100|Quantity=100|Manufacturer 1=119|Manufacturer Part Number 1=186|Manufacturer Lifecycle 1=164|Supplier 1=92|Supplier Part Number 1=159|Supplier Unit Price 1=144|Supplier Subtotal 1=139
+Configuration14_Name9=VisibleOrder_Flat
+Configuration14_Item9=Description=99|Designator=97|Part Number=100|Supplier 2=100|Supplier Part Number 2=100|Center-X(mm)=100|Center-Y(mm)=100|Layer=100|Rotation=100
 
 [PublishSettings]
 OutputFilePath1=C:\Users\The_One\OneDrive\Projects\InMotion\Slider\Hardware\MotionTrigger\Project Outputs for MotionTrigger\PDFs\
 ReleaseManaged1=1
-OutputBasePath1=Project Outputs for Free Documents
+OutputBasePath1=Project Outputs for Sampling_Scope
 OutputPathMedia1=[Media Name]
 OutputPathMediaValue1=
 OutputPathOutputer1=
@@ -479,7 +511,7 @@ OutputFileNameSpecial4=
 OpenOutput4=0
 OutputFilePath5=Project Outputs for Free Documents\
 ReleaseManaged5=1
-OutputBasePath5=Project Outputs for Free Documents
+OutputBasePath5=Project Outputs for Sampling_Scope
 OutputPathMedia5=
 OutputPathMediaValue5=
 OutputPathOutputer5=[Output Type]
@@ -492,7 +524,7 @@ OutputFileNameSpecial5=
 OpenOutput5=1
 OutputFilePath6=C:\Users\mszko\Repos\CSHD-Head\Project Outputs for CS_HD_Head\
 ReleaseManaged6=1
-OutputBasePath6=Project Outputs for Free Documents
+OutputBasePath6=Project Outputs for Sampling_Scope
 OutputPathMedia6=
 OutputPathMediaValue6=
 OutputPathOutputer6=[Output Type]
