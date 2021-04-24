@@ -9,16 +9,16 @@
 #define DELAYLINE_DELAYLINE_H_
 
 #include "../DAC/DAC.h"
-#include "../Pin/Pin.h"
+#include "../PinBus/PinBus.h"
 
 class DelayLine {
 public:
-	DelayLine(Pin** bus, DAC* DAC);
+	DelayLine(PinBus* bus, DAC* DAC);
 	virtual ~DelayLine();
 
 	void setDelay(uint32_t word);
 private:
-	Pin** Bus_;
+	PinBus* Bus_;
 	DAC* DAC_;
 };
 
