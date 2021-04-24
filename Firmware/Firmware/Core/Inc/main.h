@@ -180,6 +180,16 @@ void Error_Handler(void);
 #define PROG_DELAY_MAIN_CS_GPIO_Port GPIOA
 #define CNTR_Q5_Pin GPIO_PIN_12
 #define CNTR_Q5_GPIO_Port GPIOC
+#define CNTR_Q6_Pin GPIO_PIN_0
+#define CNTR_Q6_GPIO_Port GPIOD
+#define CNTR_Q7_Pin GPIO_PIN_1
+#define CNTR_Q7_GPIO_Port GPIOD
+#define CNTR_Q10_Pin GPIO_PIN_2
+#define CNTR_Q10_GPIO_Port GPIOD
+#define CNTR_Q8_Pin GPIO_PIN_3
+#define CNTR_Q8_GPIO_Port GPIOD
+#define CNTR_Q9_Pin GPIO_PIN_4
+#define CNTR_Q9_GPIO_Port GPIOD
 #define TM_IN1H_Pin GPIO_PIN_10
 #define TM_IN1H_GPIO_Port GPIOG
 #define TM_IN1L_Pin GPIO_PIN_11

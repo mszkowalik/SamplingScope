@@ -15,16 +15,34 @@ PinBus::PinBus(uint8_t width, uint32_t mode, Pin** busPins) {
 
 }
 
+
+
 PinBus::~PinBus() {
 	// TODO Auto-generated destructor stub
 }
 void PinBus::write(uint32_t data)
 {
-	data = data & (0xFFFFFFFF >> (32-width_)); // limit number
-	for(uint8_t i = 0; i < width_; i++)
+	if(mode_ == GPIO_MODE_OUTPUT_PP)
+	{
+		data = data & (0xFFFFFFFF >> (32-width_)); // limit number
+		for(uint8_t i = 0; i < width_; i++)
 		{
 			GPIO_PinState val  = static_cast<GPIO_PinState>((data >> i)&1);
 			pins_[i]->write(val);
 		}
+	}
+	else
+	{
+		return;
+	}
 }
 
+uint32_t PinBus::read()
+{
+	uint32_t ret = 0;
+	for(uint8_t i = 0; i < width_; i++)
+	{
+		ret += (pins_[i]->read() << i);
+	}
+	return ret;
+}

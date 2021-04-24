@@ -14,7 +14,7 @@ public:
 	PinBus(uint8_t width, uint32_t mode, Pin** busPins);
 	virtual ~PinBus();
 	void write(uint32_t data);
-
+	uint32_t read();
 private:
 	uint32_t mode_;
 	Pin** pins_;
