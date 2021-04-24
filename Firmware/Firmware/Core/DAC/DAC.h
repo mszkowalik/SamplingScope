@@ -5,15 +5,15 @@
  *      Author: mszko
  */
 
-#ifndef MCP4921_MCP4921_H_
-#define MCP4921_MCP4921_H_
+#ifndef DAC_DAC_H_
+#define DAC_DAC_H_
 
 #include "stm32h7xx.h"
 
-class MCP4921 {
+class DAC {
 public:
-	MCP4921(SPI_HandleTypeDef *hspi, float VREF);
-	virtual ~MCP4921();
+	DAC(SPI_HandleTypeDef *hspi, float VREF);
+	virtual ~DAC();
 	uint8_t Write(bool BUF, bool nGA, bool nSHDN, uint16_t data);
 	uint16_t setVoltage(uint16_t voltage);
 
@@ -23,4 +23,4 @@ private:
 	float coeffs[12] = {1,0,0,0,0,0,0,0,0,0,0,0};
 };
 
-#endif /* MCP4921_MCP4921_H_ */
+#endif /* DAC_DAC_H_ */

@@ -21,9 +21,9 @@
 #include "main.h"
 #include "usb_device.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-#include "../MCP4921/MCP4921.h"
+#include "../DAC/DAC.h"
+#include "../DelayLine/DelayLine.h"
+#include "../Pin/Pin.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,6 +51,14 @@ SPI_HandleTypeDef hspi3;
 SPI_HandleTypeDef hspi4;
 
 /* USER CODE BEGIN PV */
+Pin* MAIN_DELAY_Q0, *MAIN_DELAY_Q1, *MAIN_DELAY_Q2, *MAIN_DELAY_Q3, *MAIN_DELAY_Q4, *MAIN_DELAY_Q5, *MAIN_DELAY_Q6, *MAIN_DELAY_Q7, *MAIN_DELAY_Q8, *MAIN_DELAY_Q9, *MAIN_DELAY_Q10;
+Pin* STEP_GEN_DELAY_Q0 ,*STEP_GEN_DELAY_Q1 , *STEP_GEN_DELAY_Q2, *STEP_GEN_DELAY_Q3, *STEP_GEN_DELAY_Q4, *STEP_GEN_DELAY_Q5, *STEP_GEN_DELAY_Q6, *STEP_GEN_DELAY_Q7, *STEP_GEN_DELAY_Q8, *STEP_GEN_DELAY_Q9, *STEP_GEN_DELAY_Q10;
+Pin* CLK_EN_1 , *CLK_EN_0, *CLK_SEL_1, *CLK_SEL_0, *CNTR_RESET;
+
+
+
+
+
 
 /* USER CODE END PV */
 
@@ -69,7 +77,14 @@ static void MX_SPI4_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-MCP4921 *VREF2;
+DAC *VREF1;
+DAC *VREF2;
+DAC *DELAY_MAIN_DAC;
+DAC *DELAY_STEP_DAC;
+DelayLine *MAIN_DELAY;
+DelayLine *STEP_DELAY;
+
+
 /* USER CODE END 0 */
 
 /**
@@ -79,7 +94,8 @@ MCP4921 *VREF2;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-VREF2 = new MCP4921(&hspi2, 2.048f);
+
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -107,21 +123,99 @@ VREF2 = new MCP4921(&hspi2, 2.048f);
   MX_SPI4_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  //__HAL_SPI_ENABLE(&hspi2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	MAIN_DELAY_Q0 = new Pin(MAIN_DELAY_Q0_Pin, MAIN_DELAY_Q0_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q1 = new Pin(MAIN_DELAY_Q1_Pin, MAIN_DELAY_Q1_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q2 = new Pin(MAIN_DELAY_Q2_Pin, MAIN_DELAY_Q2_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q3 = new Pin(MAIN_DELAY_Q3_Pin, MAIN_DELAY_Q3_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q4 = new Pin(MAIN_DELAY_Q4_Pin, MAIN_DELAY_Q4_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q5 = new Pin(MAIN_DELAY_Q5_Pin, MAIN_DELAY_Q5_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q6 = new Pin(MAIN_DELAY_Q6_Pin, MAIN_DELAY_Q6_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q7 = new Pin(MAIN_DELAY_Q7_Pin, MAIN_DELAY_Q7_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q8 = new Pin(MAIN_DELAY_Q8_Pin, MAIN_DELAY_Q8_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q9 = new Pin(MAIN_DELAY_Q9_Pin, MAIN_DELAY_Q9_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	MAIN_DELAY_Q10 = new Pin(MAIN_DELAY_Q10_Pin, MAIN_DELAY_Q10_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+
+	STEP_GEN_DELAY_Q0 = new Pin(STEP_GEN_DELAY_Q0_Pin, STEP_GEN_DELAY_Q0_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q1 = new Pin(STEP_GEN_DELAY_Q1_Pin, STEP_GEN_DELAY_Q1_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q2 = new Pin(STEP_GEN_DELAY_Q2_Pin, STEP_GEN_DELAY_Q2_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q3 = new Pin(STEP_GEN_DELAY_Q3_Pin, STEP_GEN_DELAY_Q3_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q4 = new Pin(STEP_GEN_DELAY_Q4_Pin, STEP_GEN_DELAY_Q4_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q5 = new Pin(STEP_GEN_DELAY_Q5_Pin, STEP_GEN_DELAY_Q5_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q6 = new Pin(STEP_GEN_DELAY_Q6_Pin, STEP_GEN_DELAY_Q6_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q7 = new Pin(STEP_GEN_DELAY_Q7_Pin, STEP_GEN_DELAY_Q7_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q8 = new Pin(STEP_GEN_DELAY_Q8_Pin, STEP_GEN_DELAY_Q8_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q9 = new Pin(STEP_GEN_DELAY_Q9_Pin, STEP_GEN_DELAY_Q9_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+	STEP_GEN_DELAY_Q10 = new Pin(STEP_GEN_DELAY_Q10_Pin, STEP_GEN_DELAY_Q10_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
+
+	CLK_EN_1 = new Pin(CLK_EN_1_Pin, CLK_EN_1_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
+	CLK_EN_0 = new Pin(CLK_EN_0_Pin, CLK_EN_0_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
+	CLK_SEL_1 = new Pin(CLK_SEL_1_Pin, CLK_SEL_1_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
+	CLK_SEL_0 = new Pin(CLK_SEL_0_Pin, CLK_SEL_0_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_RESET);
+	CNTR_RESET = new Pin(CNTR_RESET_Pin, CNTR_RESET_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
+
+	Pin* PROG_DELAY_MAIN [11] = {
+			MAIN_DELAY_Q0,
+			MAIN_DELAY_Q1,
+			MAIN_DELAY_Q2,
+			MAIN_DELAY_Q3,
+			MAIN_DELAY_Q4,
+			MAIN_DELAY_Q5,
+			MAIN_DELAY_Q6,
+			MAIN_DELAY_Q7,
+			MAIN_DELAY_Q8,
+			MAIN_DELAY_Q9,
+			MAIN_DELAY_Q10
+	};
+
+	Pin* PROG_DELAY_STEP_GEN [11] = {
+			STEP_GEN_DELAY_Q0,
+			STEP_GEN_DELAY_Q1,
+			STEP_GEN_DELAY_Q2,
+			STEP_GEN_DELAY_Q3,
+			STEP_GEN_DELAY_Q4,
+			STEP_GEN_DELAY_Q5,
+			STEP_GEN_DELAY_Q6,
+			STEP_GEN_DELAY_Q7,
+			STEP_GEN_DELAY_Q8,
+			STEP_GEN_DELAY_Q9,
+			STEP_GEN_DELAY_Q10
+	};
+
+	VREF1 = new DAC(&hspi1, 2.048f);
+	VREF2 = new DAC(&hspi2, 2.048f);
+	DELAY_MAIN_DAC = new DAC(&hspi3, 2.048f);
+	DELAY_STEP_DAC = new DAC(&hspi4, 2.048f);
+
+	MAIN_DELAY = new DelayLine(PROG_DELAY_MAIN, DELAY_MAIN_DAC);
+	STEP_DELAY = new DelayLine(PROG_DELAY_STEP_GEN, DELAY_STEP_DAC);
+  //HAL_GPIO_WritePin(CLK_EN_1_GPIO_Port, CLK_EN_1_Pin, GPIO_PIN_SET);
+//  HAL_GPIO_WritePin(CLK_EN_0_GPIO_Port, CLK_EN_0_Pin, GPIO_PIN_SET);
+//  HAL_GPIO_WritePin(CLK_SEL_1_GPIO_Port, CLK_SEL_1_Pin, GPIO_PIN_SET);
+//  HAL_GPIO_WritePin(CLK_SEL_0_GPIO_Port, CLK_SEL_0_Pin, GPIO_PIN_RESET);
+//  HAL_GPIO_WritePin(CNTR_RESET_GPIO_Port, CNTR_RESET_Pin, GPIO_PIN_SET);
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  for(uint16_t i = 0; i <= 4096; i++ )
-	  {
-		  VREF2->setVoltage(i);
-		  HAL_Delay(5);
-	  }
+	  //HAL_GPIO_WritePin(INT_CLK_GPIO_Port, INT_CLK_Pin, GPIO_PIN_SET);
+	  //HAL_GPIO_WritePin(CLK_SEL_0_GPIO_Port, CLK_SEL_0_Pin, GPIO_PIN_SET);
+	  CLK_SEL_0->write(GPIO_PIN_SET);
+	  MAIN_DELAY->setDelay(0x7FFFFF);
+	  HAL_Delay(3000);
+//
+//	  HAL_GPIO_WritePin(INT_CLK_GPIO_Port, INT_CLK_Pin, GPIO_PIN_RESET);
+//	  HAL_Delay(100);
+//
+//	  HAL_GPIO_WritePin(CLK_SEL_0_GPIO_Port, CLK_SEL_0_Pin, GPIO_PIN_SET);
+	  CLK_SEL_0->write(GPIO_PIN_SET);
+	  MAIN_DELAY->setDelay(0x0);
+	  HAL_Delay(3000);
 
 
   }
@@ -320,11 +414,11 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -416,11 +510,11 @@ static void MX_SPI3_Init(void)
   hspi3.Instance = SPI3;
   hspi3.Init.Mode = SPI_MODE_MASTER;
   hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi3.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -464,11 +558,11 @@ static void MX_SPI4_Init(void)
   hspi4.Instance = SPI4;
   hspi4.Init.Mode = SPI_MODE_MASTER;
   hspi4.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi4.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi4.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi4.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi4.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi4.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi4.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -537,17 +631,18 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, STEP_GEN_DELAY_Q4_Pin|STEP_GEN_DELAY_Q5_Pin|STEP_GEN_DELAY_Q6_Pin|STEP_GEN_DELAY_Q7_Pin
-                          |STEP_GEN_DELAY_Q2_Pin|STEP_GEN_DELAY_Q1_Pin|CLK_SEL_0_Pin|CLK_SEL_1_Pin, GPIO_PIN_RESET);
+                          |STEP_GEN_DELAY_Q2_Pin|STEP_GEN_DELAY_Q1_Pin|CLK_SEL_0_Pin|INT_CLK_Pin
+                          |CLK_SEL_1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, CLK_EN_1_Pin|CLK_EN_0_Pin|VREF1_LDAC_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : SIMO_EN_Pin STEP_GEN_DELAY_Q4_Pin STEP_GEN_DELAY_Q5_Pin STEP_GEN_DELAY_Q6_Pin
                            STEP_GEN_DELAY_Q7_Pin STEP_GEN_DELAY_Q2_Pin STEP_GEN_DELAY_Q1_Pin CLK_SEL_0_Pin
-                           CLK_SEL_1_Pin */
+                           INT_CLK_Pin CLK_SEL_1_Pin */
   GPIO_InitStruct.Pin = SIMO_EN_Pin|STEP_GEN_DELAY_Q4_Pin|STEP_GEN_DELAY_Q5_Pin|STEP_GEN_DELAY_Q6_Pin
                           |STEP_GEN_DELAY_Q7_Pin|STEP_GEN_DELAY_Q2_Pin|STEP_GEN_DELAY_Q1_Pin|CLK_SEL_0_Pin
-                          |CLK_SEL_1_Pin;
+                          |INT_CLK_Pin|CLK_SEL_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -604,12 +699,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : INT_CLK_Pin */
-  GPIO_InitStruct.Pin = INT_CLK_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(INT_CLK_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CLK_EN_1_Pin CLK_EN_0_Pin VREF1_LDAC_Pin */
   GPIO_InitStruct.Pin = CLK_EN_1_Pin|CLK_EN_0_Pin|VREF1_LDAC_Pin;

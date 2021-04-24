@@ -5,20 +5,20 @@
  *      Author: mszko
  */
 
-#include "MCP4921.h"
+#include "DAC.h"
 //#include "stm32h7xx_hal_spi.h"
 
-MCP4921::MCP4921(SPI_HandleTypeDef *hspi, float VREF=2.048) {
+DAC::DAC(SPI_HandleTypeDef *hspi, float VREF=2.048) {
 	spi_ = hspi;
 	vref_ = VREF;
 
 }
 
-MCP4921::~MCP4921() {
+DAC::~DAC() {
 	// TODO Auto-generated destructor stub
 }
 
-uint8_t MCP4921::Write(bool BUF, bool nGA, bool nSHDN, uint16_t data)
+uint8_t DAC::Write(bool BUF, bool nGA, bool nSHDN, uint16_t data)
 {
 	  uint8_t brx[20];
 	  uint8_t btx[2] = {0b00111100 , 0b11111111};
@@ -31,7 +31,7 @@ uint8_t MCP4921::Write(bool BUF, bool nGA, bool nSHDN, uint16_t data)
 	  return 0;
 }
 
-uint16_t MCP4921::setVoltage(uint16_t Voltage)
+uint16_t DAC::setVoltage(uint16_t Voltage)
 {
 	Write(0, 1, 1, Voltage);
 }
