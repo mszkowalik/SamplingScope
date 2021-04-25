@@ -8,12 +8,18 @@
 #ifndef FREQCOUNTER_FREQCOUNTER_H_
 #define FREQCOUNTER_FREQCOUNTER_H_
 
-#include "../Pin/Pin.h"
+#include "../PinBus/PinBus.h"
 
 class FreqCounter {
 public:
-	FreqCounter(Pin** bus, Pin* Reset);
+	FreqCounter(PinBus* bus, Pin* reset);
 	virtual ~FreqCounter();
+
+	void reset();
+
+private:
+	PinBus* bus_;
+	Pin* reset_;
 };
 
 #endif /* FREQCOUNTER_FREQCOUNTER_H_ */

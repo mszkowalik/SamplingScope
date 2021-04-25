@@ -29,7 +29,7 @@ Pin::Pin(uint16_t PinNumber, GPIO_TypeDef * PortNumber, uint32_t Mode, GPIO_PinS
 	{
 		HAL_GPIO_WritePin(portNumber_, pinNumber_, default_);
 
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	}
 	if(Mode == GPIO_MODE_INPUT)
 	{

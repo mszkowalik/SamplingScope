@@ -7,8 +7,9 @@
 
 #include "FreqCounter.h"
 
-FreqCounter::FreqCounter(Pin** bus, Pin* Reset) {
-	// TODO Auto-generated constructor stub
+FreqCounter::FreqCounter(PinBus* bus, Pin* reset) {
+	bus_ = bus;
+	reset_ = reset;
 
 }
 
@@ -16,3 +17,7 @@ FreqCounter::~FreqCounter() {
 	// TODO Auto-generated destructor stub
 }
 
+
+void FreqCounter::reset()
+{
+}

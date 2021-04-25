@@ -24,9 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "../DAC/DAC.h"
-#include "../DelayLine/DelayLine.h"
-
+#include "../SamplingScope.h"
+#include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,20 +52,10 @@ SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
 SPI_HandleTypeDef hspi4;
 
+TIM_HandleTypeDef htim24;
+
 /* USER CODE BEGIN PV */
-Pin *MAIN_DELAY_Q0, *MAIN_DELAY_Q1, *MAIN_DELAY_Q2, *MAIN_DELAY_Q3, *MAIN_DELAY_Q4, *MAIN_DELAY_Q5, *MAIN_DELAY_Q6, *MAIN_DELAY_Q7, *MAIN_DELAY_Q8, *MAIN_DELAY_Q9, *MAIN_DELAY_Q10;
-Pin *STEP_GEN_DELAY_Q0 ,*STEP_GEN_DELAY_Q1 , *STEP_GEN_DELAY_Q2, *STEP_GEN_DELAY_Q3, *STEP_GEN_DELAY_Q4, *STEP_GEN_DELAY_Q5, *STEP_GEN_DELAY_Q6, *STEP_GEN_DELAY_Q7, *STEP_GEN_DELAY_Q8, *STEP_GEN_DELAY_Q9, *STEP_GEN_DELAY_Q10;
-Pin *CNTR_Q0, *CNTR_Q1, *CNTR_Q2, *CNTR_Q3, *CNTR_Q4, *CNTR_Q5, *CNTR_Q6, *CNTR_Q7, *CNTR_Q8, *CNTR_Q9, *CNTR_Q10, *CNTR_Q11, *CNTR_Q12, *CNTR_Q13, *CNTR_Q14, *CNTR_Q15;
-Pin *CLK_EN_1 , *CLK_EN_0, *CLK_SEL_1, *CLK_SEL_0, *CNTR_RESET;
 
-PinBus* MAIN_DELAY_BUS, *STEP_GEN_DELAY_BUS, *CNTR_BUS;
-
-DAC *VREF1;
-DAC *VREF2;
-DAC *DELAY_MAIN_DAC;
-DAC *DELAY_STEP_DAC;
-DelayLine *MAIN_DELAY;
-DelayLine *STEP_DELAY;
 
 /* USER CODE END PV */
 
@@ -79,6 +68,7 @@ static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_SPI4_Init(void);
+static void MX_TIM24_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -86,6 +76,7 @@ static void MX_SPI4_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+SamplingScope *scope;
 /* USER CODE END 0 */
 
 /**
@@ -123,141 +114,42 @@ int main(void)
   MX_SPI3_Init();
   MX_SPI4_Init();
   MX_USB_DEVICE_Init();
+  MX_TIM24_Init();
   /* USER CODE BEGIN 2 */
+
+  //HAL_TIM_Base_Start_IT(&htim24);
+  //HAL_TIM_Base_Start_IT(&htim24);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	MAIN_DELAY_Q0 = new Pin(MAIN_DELAY_Q0_Pin, MAIN_DELAY_Q0_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q1 = new Pin(MAIN_DELAY_Q1_Pin, MAIN_DELAY_Q1_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q2 = new Pin(MAIN_DELAY_Q2_Pin, MAIN_DELAY_Q2_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q3 = new Pin(MAIN_DELAY_Q3_Pin, MAIN_DELAY_Q3_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q4 = new Pin(MAIN_DELAY_Q4_Pin, MAIN_DELAY_Q4_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q5 = new Pin(MAIN_DELAY_Q5_Pin, MAIN_DELAY_Q5_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q6 = new Pin(MAIN_DELAY_Q6_Pin, MAIN_DELAY_Q6_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q7 = new Pin(MAIN_DELAY_Q7_Pin, MAIN_DELAY_Q7_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q8 = new Pin(MAIN_DELAY_Q8_Pin, MAIN_DELAY_Q8_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q9 = new Pin(MAIN_DELAY_Q9_Pin, MAIN_DELAY_Q9_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	MAIN_DELAY_Q10 = new Pin(MAIN_DELAY_Q10_Pin, MAIN_DELAY_Q10_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-
-	STEP_GEN_DELAY_Q0 = new Pin(STEP_GEN_DELAY_Q0_Pin, STEP_GEN_DELAY_Q0_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q1 = new Pin(STEP_GEN_DELAY_Q1_Pin, STEP_GEN_DELAY_Q1_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q2 = new Pin(STEP_GEN_DELAY_Q2_Pin, STEP_GEN_DELAY_Q2_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q3 = new Pin(STEP_GEN_DELAY_Q3_Pin, STEP_GEN_DELAY_Q3_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q4 = new Pin(STEP_GEN_DELAY_Q4_Pin, STEP_GEN_DELAY_Q4_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q5 = new Pin(STEP_GEN_DELAY_Q5_Pin, STEP_GEN_DELAY_Q5_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q6 = new Pin(STEP_GEN_DELAY_Q6_Pin, STEP_GEN_DELAY_Q6_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q7 = new Pin(STEP_GEN_DELAY_Q7_Pin, STEP_GEN_DELAY_Q7_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q8 = new Pin(STEP_GEN_DELAY_Q8_Pin, STEP_GEN_DELAY_Q8_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q9 = new Pin(STEP_GEN_DELAY_Q9_Pin, STEP_GEN_DELAY_Q9_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-	STEP_GEN_DELAY_Q10 = new Pin(STEP_GEN_DELAY_Q10_Pin, STEP_GEN_DELAY_Q10_GPIO_Port,GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
-
-	CNTR_Q0 = new Pin(CNTR_Q0_Pin, CNTR_Q0_GPIO_Port, GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q1 = new Pin(CNTR_Q1_Pin, CNTR_Q1_GPIO_Port, GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q2 = new Pin(CNTR_Q2_Pin, CNTR_Q2_GPIO_Port, GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q3 = new Pin(CNTR_Q3_Pin, CNTR_Q3_GPIO_Port, GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q4 = new Pin(CNTR_Q4_Pin, CNTR_Q4_GPIO_Port, GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q5 = new Pin(CNTR_Q5_Pin, CNTR_Q5_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q6 = new Pin(CNTR_Q6_Pin, CNTR_Q6_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q7 = new Pin(CNTR_Q7_Pin, CNTR_Q7_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q8 = new Pin(CNTR_Q8_Pin, CNTR_Q8_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q9 = new Pin(CNTR_Q9_Pin, CNTR_Q9_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q10 = new Pin(CNTR_Q10_Pin, CNTR_Q10_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q11 = new Pin(CNTR_Q11_Pin, CNTR_Q11_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q12 = new Pin(CNTR_Q12_Pin, CNTR_Q12_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q13 = new Pin(CNTR_Q13_Pin, CNTR_Q13_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q14 = new Pin(CNTR_Q14_Pin, CNTR_Q14_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-	CNTR_Q15 = new Pin(CNTR_Q15_Pin, CNTR_Q15_GPIO_Port,GPIO_MODE_INPUT,GPIO_PIN_RESET);
-
-	CLK_EN_1 = new Pin(CLK_EN_1_Pin, CLK_EN_1_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
-	CLK_EN_0 = new Pin(CLK_EN_0_Pin, CLK_EN_0_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
-	CLK_SEL_1 = new Pin(CLK_SEL_1_Pin, CLK_SEL_1_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
-	CLK_SEL_0 = new Pin(CLK_SEL_0_Pin, CLK_SEL_0_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_RESET);
-	CNTR_RESET = new Pin(CNTR_RESET_Pin, CNTR_RESET_GPIO_Port,GPIO_MODE_OUTPUT_PP, GPIO_PIN_SET);
-
-	Pin* PROG_DELAY_MAIN [11] = {
-			MAIN_DELAY_Q0,
-			MAIN_DELAY_Q1,
-			MAIN_DELAY_Q2,
-			MAIN_DELAY_Q3,
-			MAIN_DELAY_Q4,
-			MAIN_DELAY_Q5,
-			MAIN_DELAY_Q6,
-			MAIN_DELAY_Q7,
-			MAIN_DELAY_Q8,
-			MAIN_DELAY_Q9,
-			MAIN_DELAY_Q10
-	};
-
-	Pin* PROG_DELAY_STEP_GEN [11] = {
-			STEP_GEN_DELAY_Q0,
-			STEP_GEN_DELAY_Q1,
-			STEP_GEN_DELAY_Q2,
-			STEP_GEN_DELAY_Q3,
-			STEP_GEN_DELAY_Q4,
-			STEP_GEN_DELAY_Q5,
-			STEP_GEN_DELAY_Q6,
-			STEP_GEN_DELAY_Q7,
-			STEP_GEN_DELAY_Q8,
-			STEP_GEN_DELAY_Q9,
-			STEP_GEN_DELAY_Q10
-	};
-
-	Pin* CNTR [16] = {
-			CNTR_Q0,
-			CNTR_Q1,
-			CNTR_Q2,
-			CNTR_Q3,
-			CNTR_Q4,
-			CNTR_Q5,
-			CNTR_Q6,
-			CNTR_Q7,
-			CNTR_Q8,
-			CNTR_Q9,
-			CNTR_Q10,
-			CNTR_Q11,
-			CNTR_Q12,
-			CNTR_Q13,
-			CNTR_Q14,
-			CNTR_Q15
-		};
+  const uint16_t start=0;
+  const uint64_t stop = 0x7FFFFF;
 
 
-	VREF1 = new DAC(&hspi1, 2.048f);
-	VREF2 = new DAC(&hspi2, 2.048f);
-	DELAY_MAIN_DAC = new DAC(&hspi3, 2.048f);
-	DELAY_STEP_DAC = new DAC(&hspi4, 2.048f);
-
-	MAIN_DELAY_BUS = new PinBus(11,GPIO_MODE_OUTPUT_PP, PROG_DELAY_MAIN);
-	STEP_GEN_DELAY_BUS = new PinBus(11,GPIO_MODE_OUTPUT_PP, PROG_DELAY_STEP_GEN);
-	CNTR_BUS = new PinBus(16,GPIO_MODE_INPUT, CNTR);
-
-	MAIN_DELAY = new DelayLine(MAIN_DELAY_BUS, DELAY_MAIN_DAC);
-	STEP_DELAY = new DelayLine(STEP_GEN_DELAY_BUS, DELAY_STEP_DAC);
-
+  scope = new SamplingScope(&hspi1, &hspi2, &hspi3, &hspi3, &htim24);
+  uint8_t DataToSend[40];
+  uint8_t MessageLength = 0;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  //scope->delayTest();
+	  float avg = 0.0;
+	  const uint16_t reps=1000;
+	  for(uint64_t j=0; j < stop; j+=256)
+	  {
+		  avg = 0.0;
+		  for(uint16_t i=0; i < reps; i++)
+		  {
+			  avg+= (float(scope->measureDelay(j))/reps);
+		  }
+		  MessageLength = sprintf((char*)DataToSend, "%d, %f\n\r", j, avg);
+		  CDC_Transmit_HS(DataToSend, MessageLength);
+	  }
 
-//	  HAL_Delay(3000);
-//	  MAIN_DELAY_BUS->write(0b10101010101);
-//	  HAL_Delay(3000);
-//	  MAIN_DELAY_BUS->write(0b01010101010);
-//	  CLK_SEL_0->write(GPIO_PIN_SET);
-//	  MAIN_DELAY->setDelay(0x7FFFFF);
-//	  HAL_Delay(3000);
-//
-	  MAIN_DELAY->setDelay(0x7FFFFF);
-	  CLK_SEL_0->write(GPIO_PIN_SET);
-	  HAL_Delay(1);
-	  CLK_SEL_0->write(GPIO_PIN_RESET);
-	  uint32_t val = CNTR_BUS->read();
-	  CNTR_RESET->write(GPIO_PIN_RESET);
-	  HAL_Delay(1);
-	  CNTR_RESET->write(GPIO_PIN_SET);
-	  HAL_Delay(1);
 
 
   }
@@ -630,6 +522,51 @@ static void MX_SPI4_Init(void)
 }
 
 /**
+  * @brief TIM24 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM24_Init(void)
+{
+
+  /* USER CODE BEGIN TIM24_Init 0 */
+
+  /* USER CODE END TIM24_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM24_Init 1 */
+
+  /* USER CODE END TIM24_Init 1 */
+  htim24.Instance = TIM24;
+  htim24.Init.Prescaler = 0;
+  htim24.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim24.Init.Period = 0xFFFFFFFF;
+  htim24.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim24.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim24) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim24, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim24, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM24_Init 2 */
+
+  /* USER CODE END TIM24_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -766,7 +703,14 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == htim24.Instance)
+    {
+        //HAL_GPIO_TogglePin(GPIOE,INT_CLK_Pin);
 
+    }
+}
 /* USER CODE END 4 */
 
 /**
