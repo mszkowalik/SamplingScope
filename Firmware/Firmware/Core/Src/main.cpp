@@ -151,6 +151,7 @@ int main(void)
       }
   };
 
+  HAL_Delay(1000); // give time for USB CDC to enumerate
   cli = new CLI(&user_CDC_println);
 
   cli->cmd_tbl = cmd_tbl;
@@ -158,9 +159,6 @@ int main(void)
 
 
   scope = new SamplingScope(&hspi1, &hspi2, &hspi3, &hspi3, &htim24);
-
-  uint8_t DataToSend[40];
-  uint8_t MessageLength = 0;
 
   while (1)
   {
@@ -844,8 +842,7 @@ cli_status_t help_func(int argc, char **argv)
 {
 	usb_printf("HELP function executed\n\r");
 	for (int i = 1; i < argc; i++) {
-		usb_printf(argv[i]);
-		usb_printf("\n\r");
+		usb_printf("%s \n\r",argv[i]);
 	    }
 	return CLI_OK;
 }

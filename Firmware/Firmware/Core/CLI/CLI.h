@@ -33,7 +33,7 @@ public:
 	uint8_t *cmd_ptr;               /* Pointer to command buffer */
 
 	const char cli_prompt[4] = ">> ";       /* CLI prompt displayed to the user */
-	const char cli_unrecog[29] = "CMD: Command not recognised";
+	const char cli_unrecog[30] = "CMD: Command not recognised\r\n";
 	const char *cli_error_msg[2] = {
 	    "OK",
 	    "Command not recognised"

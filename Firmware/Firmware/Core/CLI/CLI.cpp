@@ -18,6 +18,7 @@ CLI::CLI(println_func_ptr_t print) {
     /* Print the CLI prompt. */
 	println((char*)cli_prompt);
 
+
   }
 
 CLI::~CLI() {
@@ -63,7 +64,6 @@ cli_status_t CLI::process()
 
 			/* Command not found */
 			println((char*)cli_unrecog);
-			println((char*)"\r\n");
 			println((char*)cli_prompt); /* Print the CLI prompt to the user.             */
 			for(uint16_t i=0; i< MAX_BUF_SIZE; i++)
 			{
