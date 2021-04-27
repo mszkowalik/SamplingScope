@@ -344,7 +344,11 @@ void usb_printf(const char *format, ...)
     va_start(args, format);
     length = vsnprintf((char *)UserTxBufferHS, APP_TX_DATA_SIZE, (char *)format, args);
     va_end(args);
-    CDC_Transmit_HS(UserTxBufferHS, length);
+
+    const uint32_t maxDelay = 100; //100 ms
+    uint64_t tick = HAL_GetTick();
+    while (CDC_Transmit_HS(UserTxBufferHS, length)!= USBD_OK && HAL_GetTick() - tick < maxDelay);
+
 }
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
