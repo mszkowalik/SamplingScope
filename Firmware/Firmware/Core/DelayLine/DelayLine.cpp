@@ -25,6 +25,11 @@ void DelayLine::setDelay(uint32_t word)
 
 	Bus_->write(word >>12);
 
+/* Delay line has max of 1.5V input voltage
+	0V -> 47ps
+	1.5V -> 0ps
+	additional delay goes only or 3000 LSB.
 
-	DAC_->setVoltage(word & 4095 );  //lower 12 bits of data
+*/
+	DAC_->setVoltage(uint16_t((word & 4095) * (3000.0 / 4096.0)) );  //lower 12 bits of data
 }

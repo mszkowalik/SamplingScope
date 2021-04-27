@@ -26,6 +26,9 @@
 
 #include "../SamplingScope.h"
 #include "usbd_cdc_if.h"
+#include "../CLI/CLI.h"
+
+#include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +47,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 
 I2C_HandleTypeDef hi2c1;
 
@@ -56,12 +60,15 @@ TIM_HandleTypeDef htim24;
 
 /* USER CODE BEGIN PV */
 
-
+cli_status_t help_func(int argc, char **argv);
+void user_CDC_println(char *string);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void PeriphCommonClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
@@ -70,13 +77,18 @@ static void MX_SPI3_Init(void);
 static void MX_SPI4_Init(void);
 static void MX_TIM24_Init(void);
 /* USER CODE BEGIN PFP */
-
+void HAL_ADC_ConvCpltCallback_x(ADC_HandleTypeDef* hadc) {
+//	 sprintf(t," xxx");
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
 SamplingScope *scope;
+CLI *cli;
+
+volatile uint16_t ADC_RAW[10];
 /* USER CODE END 0 */
 
 /**
@@ -86,7 +98,6 @@ SamplingScope *scope;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
 
   /* USER CODE END 1 */
 
@@ -101,12 +112,15 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+/* Configure the peripherals common clocks */
+  PeriphCommonClock_Config();
 
+  /* USER CODE BEGIN SysInit */
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_SPI1_Init();
@@ -116,7 +130,8 @@ int main(void)
   MX_USB_DEVICE_Init();
   MX_TIM24_Init();
   /* USER CODE BEGIN 2 */
-
+  //  HAL_ADC_MspInit(&hadc1);
+  HAL_ADC_Start_DMA(&hadc1,(uint32_t*)&ADC_RAW[1], 8);
   //HAL_TIM_Base_Start_IT(&htim24);
   //HAL_TIM_Base_Start_IT(&htim24);
 
@@ -125,30 +140,47 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   const uint16_t start=0;
-  const uint64_t stop = 0x7FFFFF;
+ // const uint64_t stop = 0x7FFFFF;
+
+  const uint64_t stop = 200;
+
+  cmd_t cmd_tbl[] = {
+      {
+          .cmd = "help",
+          .func = help_func
+      }
+  };
+
+  cli = new CLI(&user_CDC_println);
+
+  cli->cmd_tbl = cmd_tbl;
+  cli->cmd_cnt = sizeof(cmd_tbl)/sizeof(cmd_t);
 
 
   scope = new SamplingScope(&hspi1, &hspi2, &hspi3, &hspi3, &htim24);
+
   uint8_t DataToSend[40];
   uint8_t MessageLength = 0;
+
   while (1)
   {
+	  cli->process();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 	  //scope->delayTest();
-	  float avg = 0.0;
-	  const uint16_t reps=1000;
-	  for(uint64_t j=0; j < stop; j+=256)
-	  {
-		  avg = 0.0;
-		  for(uint16_t i=0; i < reps; i++)
-		  {
-			  avg+= (float(scope->measureDelay(j))/reps);
-		  }
-		  MessageLength = sprintf((char*)DataToSend, "%d, %f\n\r", j, avg);
-		  CDC_Transmit_HS(DataToSend, MessageLength);
-	  }
+//	  float avg = 0.0;
+//	  const uint16_t reps=10;
+//	  for(uint64_t j=0; j < stop; j+=2)
+//	  {
+//		  avg = 0.0;
+//		  for(uint16_t i=0; i < reps; i++)
+//		  {
+//			  avg+= (float(scope->measureDelay(j))/reps);
+//		  }
+//		  MessageLength = sprintf((char*)DataToSend, "%d, %f\n\r", j, avg);
+//		  CDC_Transmit_HS(DataToSend, MessageLength);
+//	  }
 
 
 
@@ -173,14 +205,14 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE0);
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
-  /** Macro to configure the PLL clock source
-  */
-  __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSI
+                              |RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSIState = RCC_HSI_DIV1;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
@@ -219,6 +251,24 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief Peripherals Common Clock Configuration
+  * @retval None
+  */
+void PeriphCommonClock_Config(void)
+{
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+
+  /** Initializes the peripherals clock
+  */
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CKPER;
+  PeriphClkInitStruct.CkperClockSelection = RCC_CLKPSOURCE_HSI;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
   * @brief ADC1 Initialization Function
   * @param None
   * @retval None
@@ -227,7 +277,8 @@ static void MX_ADC1_Init(void)
 {
 
   /* USER CODE BEGIN ADC1_Init 0 */
-
+//	__HAL_RCC_ADC12_CLK_ENABLE();
+//	__HAL_RCC_DMA1_CLK_ENABLE();
   /* USER CODE END ADC1_Init 0 */
 
   ADC_MultiModeTypeDef multimode = {0};
@@ -239,18 +290,18 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV256;
   hadc1.Init.Resolution = ADC_RESOLUTION_16B;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.NbrOfConversion = 8;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
-  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
+  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc1.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
   hadc1.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -268,11 +319,66 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_64CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
   sConfig.OffsetSignedSaturation = DISABLE;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_5;
+  sConfig.Rank = ADC_REGULAR_RANK_4;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Rank = ADC_REGULAR_RANK_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_7;
+  sConfig.Rank = ADC_REGULAR_RANK_6;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Rank = ADC_REGULAR_RANK_7;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = ADC_REGULAR_RANK_8;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -542,7 +648,7 @@ static void MX_TIM24_Init(void)
   htim24.Instance = TIM24;
   htim24.Init.Prescaler = 0;
   htim24.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim24.Init.Period = 0xFFFFFFFF;
+  htim24.Init.Period = 275000;
   htim24.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim24.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim24) != HAL_OK)
@@ -563,6 +669,22 @@ static void MX_TIM24_Init(void)
   /* USER CODE BEGIN TIM24_Init 2 */
 
   /* USER CODE END TIM24_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
 
 }
 
@@ -668,6 +790,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(PD_MAIN_LDAC_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : VREF2_FB_Pin */
+  GPIO_InitStruct.Pin = VREF2_FB_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(VREF2_FB_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : STEP_GEN_DELAY_Q0_Pin STEP_GEN_DELAY_Q3_Pin CNTR_RESET_Pin PD_STEP_LDAC_Pin
                            CNTR_Q3_Pin CNTR_Q2_Pin CNTR_Q1_Pin TM_IN1H_Pin
                            TM_IN1L_Pin TM_IN2H_Pin TM_IN2L_Pin TM_nSLEEP_Pin */
@@ -711,6 +839,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
     }
 }
+
+cli_status_t help_func(int argc, char **argv)
+{
+	usb_printf("HELP function executed\n\r");
+	for (int i = 1; i < argc; i++) {
+		usb_printf(argv[i]);
+		usb_printf("\n\r");
+	    }
+	return CLI_OK;
+}
+
+void user_CDC_println(char *string)
+{
+	usb_printf(string);
+}
+
+
 /* USER CODE END 4 */
 
 /**
