@@ -38,6 +38,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+  #define ADC_CONVERTED_DATA_BUFFER_SIZE   ((uint32_t)  8)   /* Size of array aADCxConvertedData[] */
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -77,9 +78,6 @@ static void MX_SPI3_Init(void);
 static void MX_SPI4_Init(void);
 static void MX_TIM24_Init(void);
 /* USER CODE BEGIN PFP */
-void HAL_ADC_ConvCpltCallback_x(ADC_HandleTypeDef* hadc) {
-//	 sprintf(t," xxx");
-}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -88,7 +86,8 @@ void HAL_ADC_ConvCpltCallback_x(ADC_HandleTypeDef* hadc) {
 SamplingScope *scope;
 CLI *cli;
 
-volatile uint16_t ADC_RAW[10];
+uint32_t ADC_DATA[ADC_CONVERTED_DATA_BUFFER_SIZE] __attribute__((section(".ram1section")))=
+{0};
 /* USER CODE END 0 */
 
 /**
@@ -100,6 +99,12 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -131,10 +136,13 @@ int main(void)
   MX_TIM24_Init();
   /* USER CODE BEGIN 2 */
   //  HAL_ADC_MspInit(&hadc1);
-  HAL_ADC_Start_DMA(&hadc1,(uint32_t*)&ADC_RAW[1], 8);
+//  HAL_ADC_Start_DMA(&hadc1,(uint32_t*)&ADC_RAW[1], 10);
   //HAL_TIM_Base_Start_IT(&htim24);
   //HAL_TIM_Base_Start_IT(&htim24);
-
+  if (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_DATA, ADC_CONVERTED_DATA_BUFFER_SIZE) != HAL_OK)
+   {
+     Error_Handler();
+   }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -301,7 +309,11 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
   hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc1.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
-  hadc1.Init.OversamplingMode = DISABLE;
+  hadc1.Init.OversamplingMode = ENABLE;
+  hadc1.Init.Oversampling.Ratio = 1024;
+  hadc1.Init.Oversampling.RightBitShift = ADC_RIGHTBITSHIFT_NONE;
+  hadc1.Init.Oversampling.TriggeredMode = ADC_TRIGGEREDMODE_SINGLE_TRIGGER;
+  hadc1.Init.Oversampling.OversamplingStopReset = ADC_REGOVERSAMPLING_CONTINUED_MODE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -829,6 +841,30 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+  * @brief  Conversion complete callback in non-blocking mode
+  * @param  hadc: ADC handle
+  * @retval None
+  */
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
+{
+  /* Invalidate Data Cache to get the updated content of the SRAM on the first half of the ADC converted data buffer: 32 bytes */
+  SCB_InvalidateDCache_by_Addr((uint32_t *) &ADC_DATA[0], ADC_CONVERTED_DATA_BUFFER_SIZE);
+}
+
+/**
+ * @brief  Conversion DMA half-transfer callback in non-blocking mode
+ * @param  hadc: ADC handle
+ * @retval None
+  */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+   /* Invalidate Data Cache to get the updated content of the SRAM on the second half of the ADC converted data buffer: 32 bytes */
+  SCB_InvalidateDCache_by_Addr((uint32_t *) &ADC_DATA[ADC_CONVERTED_DATA_BUFFER_SIZE/2], ADC_CONVERTED_DATA_BUFFER_SIZE);
+}
+
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == htim24.Instance)

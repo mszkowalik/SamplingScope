@@ -55,6 +55,10 @@ MEMORY
 /* Define output sections */
 SECTIONS
 {
+  .ram1block (NOLOAD) :
+  {
+    KEEP(*(.ram1section))
+  } > RAM_D1
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
