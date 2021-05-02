@@ -16,13 +16,32 @@
 
 class SamplingScope {
 public:
-	SamplingScope(SPI_HandleTypeDef *vref1_hspi,SPI_HandleTypeDef *vref2_hspi,SPI_HandleTypeDef *delay_main_dac_hspi,SPI_HandleTypeDef *delay_step_dac_hspi, TIM_HandleTypeDef *timer);
+	SamplingScope(SPI_HandleTypeDef *vref1_hspi,SPI_HandleTypeDef *vref2_hspi,SPI_HandleTypeDef *delay_main_dac_hspi,SPI_HandleTypeDef *delay_step_dac_hspi, TIM_HandleTypeDef *timer, uint32_t* ADC_RAW);
 	virtual ~SamplingScope();
 
-	uint32_t measureDelay(uint32_t controlWord);
+	//conversion form ADC channel number
+	enum DAC_CHANNEL
+	{	_PD_MAIN = 3,
+		_PD_STEP = 4,
+		_VREF1 = 0,
+		_VREF2 = 1
+	};
+	enum THERMISTOR_CHANNEL
+	{
+		_RT0 = 7,
+		_RT1 = 6,
+		_RT2 = 2,
+		_RT3 = 5
+	};
+
+	float measureDelay(uint32_t controlWord); // set Delay to Word, return float with seconds of delay
 	void precDelay_us(uint64_t delay);
 	void delayTest();
+	float getDACVoltage(uint8_t CH);
+	float getTemp(uint8_t CH);
+	void idle();
 private:
+	uint32_t* ADC;
 	Pin *MAIN_DELAY_Q0, *MAIN_DELAY_Q1, *MAIN_DELAY_Q2, *MAIN_DELAY_Q3, *MAIN_DELAY_Q4, *MAIN_DELAY_Q5, *MAIN_DELAY_Q6, *MAIN_DELAY_Q7, *MAIN_DELAY_Q8, *MAIN_DELAY_Q9, *MAIN_DELAY_Q10;
 	Pin *STEP_GEN_DELAY_Q0 ,*STEP_GEN_DELAY_Q1 , *STEP_GEN_DELAY_Q2, *STEP_GEN_DELAY_Q3, *STEP_GEN_DELAY_Q4, *STEP_GEN_DELAY_Q5, *STEP_GEN_DELAY_Q6, *STEP_GEN_DELAY_Q7, *STEP_GEN_DELAY_Q8, *STEP_GEN_DELAY_Q9, *STEP_GEN_DELAY_Q10;
 	Pin *CNTR_Q0, *CNTR_Q1, *CNTR_Q2, *CNTR_Q3, *CNTR_Q4, *CNTR_Q5, *CNTR_Q6, *CNTR_Q7, *CNTR_Q8, *CNTR_Q9, *CNTR_Q10, *CNTR_Q11, *CNTR_Q12, *CNTR_Q13, *CNTR_Q14, *CNTR_Q15;
@@ -43,6 +62,7 @@ private:
 
 	FreqCounter *COUNTER;
 	TIM_HandleTypeDef* timer_;
+
 
 
 };

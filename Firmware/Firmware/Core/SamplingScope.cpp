@@ -6,9 +6,12 @@
  */
 
 #include "SamplingScope.h"
+#include "math.h"
 
-SamplingScope::SamplingScope(SPI_HandleTypeDef *vref1_hspi,SPI_HandleTypeDef *vref2_hspi,SPI_HandleTypeDef *delay_main_dac_hspi,SPI_HandleTypeDef *delay_step_dac_hspi, TIM_HandleTypeDef *timer) {
-	// TODO Auto-generated constructor stub
+SamplingScope::SamplingScope(SPI_HandleTypeDef *vref1_hspi,SPI_HandleTypeDef *vref2_hspi,SPI_HandleTypeDef *delay_main_dac_hspi,SPI_HandleTypeDef *delay_step_dac_hspi, TIM_HandleTypeDef *timer, uint32_t* ADC_RAW) {
+
+	ADC = ADC_RAW;
+
 	MAIN_DELAY_Q0 = new Pin(MAIN_DELAY_Q0_Pin, MAIN_DELAY_Q0_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
 	MAIN_DELAY_Q1 = new Pin(MAIN_DELAY_Q1_Pin, MAIN_DELAY_Q1_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
 	MAIN_DELAY_Q2 = new Pin(MAIN_DELAY_Q2_Pin, MAIN_DELAY_Q2_GPIO_Port, GPIO_MODE_OUTPUT_PP,GPIO_PIN_RESET);
@@ -121,7 +124,6 @@ SamplingScope::SamplingScope(SPI_HandleTypeDef *vref1_hspi,SPI_HandleTypeDef *vr
 	CNTR_BUS->read();
 	MAIN_DELAY_BUS->write(0b10101111000);
 
-
 }
 void SamplingScope::delayTest(){
 	while(1){
@@ -137,7 +139,7 @@ SamplingScope::~SamplingScope() {
 	// TODO Auto-generated destructor stub
 }
 
-uint32_t SamplingScope::measureDelay(uint32_t controlWord)
+float SamplingScope::measureDelay(uint32_t controlWord)
 {
 	CLK_SEL_1->write(GPIO_PIN_RESET);
 	CNTR_RESET->write(GPIO_PIN_RESET);
@@ -159,7 +161,11 @@ uint32_t SamplingScope::measureDelay(uint32_t controlWord)
 	CLK_SEL_0->write(GPIO_PIN_RESET); //deselect CLK1
 	//read counter value
 	uint32_t delay = CNTR_BUS->read();
-	return delay;
+
+	float delay_s = 1/float(delay*1E3);
+
+
+	return delay_s;
 
 }
 
@@ -168,4 +174,35 @@ void SamplingScope::precDelay_us(uint64_t delay)
 	__HAL_TIM_SET_COUNTER(timer_,0);
 	delay = delay*275;
 	while(__HAL_TIM_GET_COUNTER(timer_) < ((delay)));
+}
+
+float SamplingScope::getDACVoltage(uint8_t CH)
+{
+
+	if (CH == _PD_MAIN || CH ==_PD_STEP || CH ==_VREF1 || CH ==_VREF2)
+	{
+		float ret = ((ADC[CH]/1024.0)*(3.3)/65536); //divide by 1024 -> oversampling
+	}
+	else
+		return 0.0;
+}
+float SamplingScope::getTemp(uint8_t CH)
+{
+	if (CH == _RT0 || CH ==_RT1 || CH ==_RT2 || CH ==_RT3)
+	{ //Nominal B-Constant 3350e3399K = 3375
+		const float B = 3375.0;
+		float volt = ((ADC[CH]/1024.0)*(3.3)/65536); //divide by 1024 -> oversampling
+		float res = volt/((3.3-volt)/10000.0);
+		float Temp = (1/((log(res/10000.0)/B)+(1/298.15)))-273.15;
+		return Temp;
+	}
+	else
+		return 0.0;
+}
+
+
+void SamplingScope::idle()
+{
+	MAIN_DELAY->setDelay(0);
+	CLK_SEL_0->write(GPIO_PIN_SET); // select CLK1 input
 }

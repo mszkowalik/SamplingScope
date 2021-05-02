@@ -33,5 +33,6 @@ uint8_t DAC::Write(bool BUF, bool nGA, bool nSHDN, uint16_t data)
 
 uint16_t DAC::setVoltage(uint16_t Voltage)
 {
+	//unbuffered by default, shutdown disable and gain set to 1
 	Write(0, 1, 1, Voltage);
 }

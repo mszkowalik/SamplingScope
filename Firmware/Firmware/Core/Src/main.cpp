@@ -27,7 +27,7 @@
 #include "../SamplingScope.h"
 #include "usbd_cdc_if.h"
 #include "../CLI/CLI.h"
-
+#include <stdlib.h>
 #include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
@@ -62,6 +62,7 @@ TIM_HandleTypeDef htim24;
 /* USER CODE BEGIN PV */
 
 cli_status_t help_func(int argc, char **argv);
+cli_status_t measureDelay(int argc, char** argv);
 void user_CDC_println(char *string);
 /* USER CODE END PV */
 
@@ -135,10 +136,7 @@ int main(void)
   MX_USB_DEVICE_Init();
   MX_TIM24_Init();
   /* USER CODE BEGIN 2 */
-  //  HAL_ADC_MspInit(&hadc1);
-//  HAL_ADC_Start_DMA(&hadc1,(uint32_t*)&ADC_RAW[1], 10);
-  //HAL_TIM_Base_Start_IT(&htim24);
-  //HAL_TIM_Base_Start_IT(&htim24);
+
   if (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_DATA, ADC_CONVERTED_DATA_BUFFER_SIZE) != HAL_OK)
    {
      Error_Handler();
@@ -150,13 +148,18 @@ int main(void)
   const uint16_t start=0;
  // const uint64_t stop = 0x7FFFFF;
 
-  const uint64_t stop = 200;
+//  const uint64_t stop = 0x7FFFFF;
+  const uint64_t stop = 4095;
 
   cmd_t cmd_tbl[] = {
       {
           .cmd = "help",
           .func = help_func
-      }
+      },
+	  {
+			  .cmd = "measureDelay",
+			  .func = measureDelay
+	  }
   };
 
   HAL_Delay(1000); // give time for USB CDC to enumerate
@@ -165,28 +168,31 @@ int main(void)
   cli->cmd_tbl = cmd_tbl;
   cli->cmd_cnt = sizeof(cmd_tbl)/sizeof(cmd_t);
 
-
-  scope = new SamplingScope(&hspi1, &hspi2, &hspi3, &hspi3, &htim24);
-
+  scope = new SamplingScope(&hspi1, &hspi2, &hspi3, &hspi3, &htim24, ADC_DATA);
   while (1)
   {
-	  cli->process();
+      //cli->process();
+	  //scope->idle();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  //scope->delayTest();
-//	  float avg = 0.0;
-//	  const uint16_t reps=10;
-//	  for(uint64_t j=0; j < stop; j+=2)
-//	  {
-//		  avg = 0.0;
-//		  for(uint16_t i=0; i < reps; i++)
-//		  {
-//			  avg+= (float(scope->measureDelay(j))/reps);
-//		  }
-//		  MessageLength = sprintf((char*)DataToSend, "%d, %f\n\r", j, avg);
-//		  CDC_Transmit_HS(DataToSend, MessageLength);
-//	  }
+
+
+	  float avg = 0.0;
+	  const uint16_t reps=1024;
+	  uint32_t r= 0;
+	  for(uint32_t j=start; j <= stop; j+=8)
+	  {
+		  avg = 0.0;
+		  for(uint16_t i=0; i < reps; i++)
+		  {
+			  avg+= scope->measureDelay(j);
+		  }
+		  avg /= reps;
+		  r = j;
+		  usb_printf("%d, %.16e\n\r", r, avg);
+		  HAL_Delay(10);
+	  }
 
 
 
@@ -364,6 +370,7 @@ static void MX_ADC1_Init(void)
   }
   /** Configure Regular Channel
   */
+  sConfig.Channel = ADC_CHANNEL_6;
   sConfig.Rank = ADC_REGULAR_RANK_5;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
@@ -658,7 +665,7 @@ static void MX_TIM24_Init(void)
   htim24.Instance = TIM24;
   htim24.Init.Prescaler = 0;
   htim24.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim24.Init.Period = 275000;
+  htim24.Init.Period = 2750000;
   htim24.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim24.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim24) != HAL_OK)
@@ -883,6 +890,23 @@ cli_status_t help_func(int argc, char **argv)
 	return CLI_OK;
 }
 
+
+cli_status_t measureDelay(int argc, char** argv)
+{
+	if(argc == 3)
+	{
+		uint32_t word = atoi(argv[1]);
+		uint32_t reps = atoi(argv[2]);
+		float ret = 0.0;
+
+		usb_printf("Measuring %d reps of Delay %d \n\r", reps, word);
+		for(int i = 0; i < reps; i++){
+			ret += scope->measureDelay(word);
+		}
+		ret = ret/reps;
+		usb_printf("Delay [s] : %.16e\n\r", ret);
+	}
+}
 void user_CDC_println(char *string)
 {
 	usb_printf(string);
